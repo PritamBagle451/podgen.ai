@@ -17,8 +17,18 @@ st.write("Turn any topic into a podcast with Sarvam AI.")
 
 api_key = os.getenv("SARVAM_API_KEY")
 
+
+
+api_key = os.getenv("SARVAM_API_KEY")
+
 if not api_key:
-    st.error("Please add your API key to the .env file.")
+    try:
+        api_key = st.secrets["SARVAM_API_KEY"]
+    except (KeyError, FileNotFoundError):
+        api_key = None
+
+if not api_key:
+    st.error("Please configure SARVAM_API_KEY in Streamlit Secrets.")
     st.stop()
 
 client = SarvamAI(api_subscription_key=api_key)
